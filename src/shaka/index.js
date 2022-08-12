@@ -39,6 +39,7 @@ class ShakaPlayer extends BasePlayer {
     if (this.manifest) {
     
       player.addEventListener('error', this.ErrHandler.bind(this))
+      player.addEventListener('emsg', this.EmsgHandler.bind(this))
 
       if (this.playReadyLicenseUrl || this.widevineLicenseUrl) {
         player.configure({
@@ -97,6 +98,11 @@ class ShakaPlayer extends BasePlayer {
     }
 
     return true
+  }
+
+  EmsgHandler (emsg) {
+    this.addInfoMessage('EMSG: Scheme = ' + emsg.detail.schemeIdUri + ' at ' + emsg.detail.startTime + ' to ' + emsg.detail.endTime + ' (' + emsg.detail.timescale + ') for ' + emsg.detail.eventDuration + ' data length = ' + emsg.detail.messageData.length);
+    this.addInfoMessage('EMSG: Data = {' + new TextDecoder().decode(emsg.detail.messageData) + '}')
   }
 
   ErrHandler (err) {
